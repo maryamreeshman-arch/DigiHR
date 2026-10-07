@@ -1,0 +1,48 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('job_postings', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('tenant_id')
+                ->constrained('tenants')
+                ->cascadeOnDelete();
+
+            $table->foreignId('job_requisition_id')
+                ->constrained('job_requisitions')
+                ->cascadeOnDelete();
+
+            $table->string('title');
+
+            $table->text('description');
+
+            $table->text('requirements');
+
+            $table->string('location');
+
+            $table->foreignId('employment_type_id')
+                ->constrained('employment_types')
+                ->restrictOnDelete();
+
+            $table->timestamp('published_at')->nullable();
+
+            $table->timestamp('closing_at')->nullable();
+
+            $table->string('status');
+
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('job_postings');
+    }
+};
