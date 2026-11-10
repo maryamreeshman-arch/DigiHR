@@ -1,3 +1,4 @@
+import { Link, usePage } from '@inertiajs/react';
 import {
     BriefcaseBusiness,
     Building2,
@@ -6,170 +7,108 @@ import {
     UserRoundCheck,
     Users,
 } from 'lucide-react';
-
 import { useEffect, useState } from 'react';
-import { Link, usePage } from '@inertiajs/react';
 
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-    SidebarMenuSub,
-    SidebarMenuSubButton,
-    SidebarMenuSubItem,
-    SidebarRail,
 } from '@/components/ui/sidebar';
+import { type SharedData } from '@/types';
+import { NavUser } from '@/components/nav-user';
 
 export function AppSidebar() {
-    const page = usePage();
+    const { url } = usePage<SharedData>();
 
-    // =====================================================
-    // ACTIVE SECTIONS
-    // =====================================================
-
-    const isEmployeesActive =
-        page.url.startsWith('/employees') ||
-        page.url.startsWith('/employment-structure') ||
-        page.url.startsWith('/employment-history');
-
-    const isEmploymentStructureActive =
-        page.url.startsWith('/employment-structure');
-
-    const isOrganizationActive =
-        page.url.startsWith('/legal-entities') ||
-        page.url.startsWith('/companies') ||
-        page.url.startsWith('/business-units') ||
-        page.url.startsWith('/branches') ||
-        page.url.startsWith('/departments') ||
-        page.url.startsWith('/divisions') ||
-        page.url.startsWith('/locations') ||
-        page.url.startsWith('/cost-centers');
-
-    const isATSActive =
-        page.url.startsWith('/job-requisitions') ||
-        page.url.startsWith('/job-postings') ||
-        page.url.startsWith('/candidates') ||
-        page.url.startsWith('/candidate-contacts') ||
-        page.url.startsWith('/candidate-education') ||
-        page.url.startsWith('/candidate-experience') ||
-        page.url.startsWith('/candidate-skills') ||
-        page.url.startsWith('/applications') ||
-        page.url.startsWith('/application-status-histories') ||
-        page.url.startsWith('/interviews') ||
-        page.url.startsWith('/interviewers') ||
-        page.url.startsWith('/job-offers');
-
-    const isOnboardingActive =
-        page.url.startsWith('/onboarding-templates') ||
-        page.url.startsWith('/onboarding-tasks') ||
-        page.url.startsWith('/employee-onboardings') ||
-        page.url.startsWith('/employee-onboarding-tasks');
-
-    // =====================================================
-    // DROPDOWN STATES
-    // =====================================================
-
-    const [employeesOpen, setEmployeesOpen] =
-        useState(isEmployeesActive);
-
-    const [employmentStructureOpen, setEmploymentStructureOpen] =
-        useState(isEmploymentStructureActive);
-
-    const [organizationOpen, setOrganizationOpen] =
-        useState(isOrganizationActive);
-
-    const [atsOpen, setAtsOpen] =
-        useState(isATSActive);
-
-    const [onboardingOpen, setOnboardingOpen] =
-        useState(isOnboardingActive);
-
-    // =====================================================
-    // KEEP DROPDOWNS OPEN ON ACTIVE PAGE
-    // =====================================================
+    const [employeesOpen, setEmployeesOpen] = useState(false);
+    const [employmentStructureOpen, setEmploymentStructureOpen] = useState(false);
+    const [organizationOpen, setOrganizationOpen] = useState(false);
+    const [atsOpen, setAtsOpen] = useState(false);
+    const [onboardingOpen, setOnboardingOpen] = useState(false);
 
     useEffect(() => {
-        if (isEmployeesActive) {
+        if (
+            url.startsWith('/employees') ||
+            url.startsWith('/employment-structure') ||
+            url.startsWith('/employment-history')
+        ) {
             setEmployeesOpen(true);
         }
-    }, [isEmployeesActive]);
 
-    useEffect(() => {
-        if (isEmploymentStructureActive) {
+        if (url.startsWith('/employment-structure')) {
             setEmploymentStructureOpen(true);
         }
-    }, [isEmploymentStructureActive]);
 
-    useEffect(() => {
-        if (isOrganizationActive) {
+        if (
+            url.startsWith('/legal-entities') ||
+            url.startsWith('/companies') ||
+            url.startsWith('/business-units') ||
+            url.startsWith('/branches') ||
+            url.startsWith('/departments') ||
+            url.startsWith('/divisions') ||
+            url.startsWith('/locations') ||
+            url.startsWith('/cost-centers')
+        ) {
             setOrganizationOpen(true);
         }
-    }, [isOrganizationActive]);
 
-    useEffect(() => {
-        if (isATSActive) {
+        if (
+            url.startsWith('/job-requisitions') ||
+            url.startsWith('/job-postings') ||
+            url.startsWith('/candidates') ||
+            url.startsWith('/candidate-contacts') ||
+            url.startsWith('/candidate-education') ||
+            url.startsWith('/candidate-experience') ||
+            url.startsWith('/candidate-skills') ||
+            url.startsWith('/applications') ||
+            url.startsWith('/application-status-histories') ||
+            url.startsWith('/interviews') ||
+            url.startsWith('/interviewers') ||
+            url.startsWith('/job-offers') ||
+            url.startsWith('/assessments')
+        ) {
             setAtsOpen(true);
         }
-    }, [isATSActive]);
 
-    useEffect(() => {
-        if (isOnboardingActive) {
+        if (
+            url.startsWith('/onboarding-templates') ||
+            url.startsWith('/onboarding-tasks') ||
+            url.startsWith('/employee-onboardings') ||
+            url.startsWith('/employee-onboarding-tasks')
+        ) {
             setOnboardingOpen(true);
         }
-    }, [isOnboardingActive]);
+    }, [url]);
+
+    const isActive = (path: string) => {
+        return url.startsWith(path);
+    };
 
     return (
         <Sidebar collapsible="icon">
 
-            {/* =====================================================
-                SIDEBAR HEADER
-            ===================================================== */}
-
+            {/* DigiHR Name */}
             <SidebarHeader>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            asChild
-                            size="lg"
-                        >
-                            <Link href="/dashboard">
-                                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                                    <LayoutGrid className="size-4" />
-                                </div>
-
-                                <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-semibold">
-                                        DigiHR
-                                    </span>
-
-                                    <span className="truncate text-xs">
-                                        Human Resource Management
-                                    </span>
-                                </div>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
+                <div className="flex h-12 items-center px-4">
+                    <span className="text-lg font-bold tracking-tight">
+                        DigiHR
+                    </span>
+                </div>
             </SidebarHeader>
-
-            {/* =====================================================
-                SIDEBAR CONTENT
-            ===================================================== */}
 
             <SidebarContent>
                 <SidebarMenu>
 
-                    {/* =================================================
-                        DASHBOARD
-                    ================================================= */}
-
+                    {/* Dashboard */}
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             asChild
-                            isActive={page.url === '/dashboard'}
+                            isActive={isActive('/dashboard')}
+                            tooltip="Dashboard"
                         >
                             <Link href="/dashboard">
                                 <LayoutGrid />
@@ -178,14 +117,12 @@ export function AppSidebar() {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
 
-                    {/* =================================================
-                        TENANTS
-                    ================================================= */}
-
+                    {/* Tenants */}
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             asChild
-                            isActive={page.url.startsWith('/tenants')}
+                            isActive={isActive('/tenants')}
+                            tooltip="Tenants"
                         >
                             <Link href="/tenants">
                                 <Building2 />
@@ -194,716 +131,397 @@ export function AppSidebar() {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
 
-                    {/* =================================================
-                        EMPLOYEES
-                    ================================================= */}
-
+                    {/* Employees */}
                     <SidebarMenuItem>
-
                         <SidebarMenuButton
-                            onClick={() =>
-                                setEmployeesOpen(!employeesOpen)
-                            }
-                            isActive={isEmployeesActive}
+                            onClick={() => setEmployeesOpen(!employeesOpen)}
+                            tooltip="Employees"
                         >
                             <Users />
-
-                            <span>
-                                Employees
-                            </span>
+                            <span>Employees</span>
 
                             <ChevronDown
                                 className={`ml-auto transition-transform ${
-                                    employeesOpen
-                                        ? 'rotate-180'
-                                        : ''
+                                    employeesOpen ? 'rotate-180' : ''
                                 }`}
                             />
                         </SidebarMenuButton>
 
                         {employeesOpen && (
-                            <SidebarMenuSub>
+                            <div className="ml-6 mt-1 space-y-1">
 
                                 {/* Employee Profile */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/employees'
-                                        )}
-                                    >
-                                        <Link href="/employees">
-                                            <span>
-                                                Employee Profile
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/employees"
+                                    className={`block rounded-md px-3 py-2 text-sm ${
+                                        isActive('/employees')
+                                            ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                                            : 'hover:bg-sidebar-accent'
+                                    }`}
+                                >
+                                    Employee Profile
+                                </Link>
 
                                 {/* Employment Structure */}
+                                <button
+                                    onClick={() =>
+                                        setEmploymentStructureOpen(
+                                            !employmentStructureOpen,
+                                        )
+                                    }
+                                    className="flex w-full items-center rounded-md px-3 py-2 text-left text-sm hover:bg-sidebar-accent"
+                                >
+                                    <span>Employment Structure</span>
 
-                                <SidebarMenuSubItem>
+                                    <ChevronDown
+                                        className={`ml-auto h-4 w-4 transition-transform ${
+                                            employmentStructureOpen
+                                                ? 'rotate-180'
+                                                : ''
+                                        }`}
+                                    />
+                                </button>
 
-                                    <SidebarMenuSubButton
-                                        onClick={() =>
-                                            setEmploymentStructureOpen(
-                                                !employmentStructureOpen
-                                            )
-                                        }
-                                        isActive={
-                                            isEmploymentStructureActive
-                                        }
-                                    >
-                                        <span>
-                                            Employment Structure
-                                        </span>
+                                {employmentStructureOpen && (
+                                    <div className="ml-4 space-y-1">
 
-                                        <ChevronDown
-                                            className={`ml-auto transition-transform ${
-                                                employmentStructureOpen
-                                                    ? 'rotate-180'
-                                                    : ''
-                                            }`}
-                                        />
-                                    </SidebarMenuSubButton>
+                                        {/* Employment Types */}
+                                        <Link
+                                            href="/employment-structure/types"
+                                            className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                        >
+                                            Employment Types
+                                        </Link>
 
-                                    {employmentStructureOpen && (
-                                        <SidebarMenuSub>
+                                        {/* Employment Statuses */}
+                                        <Link
+                                            href="/employment-structure/statuses"
+                                            className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                        >
+                                            Employment Statuses
+                                        </Link>
 
-                                            {/* Employment Types */}
+                                        {/* Job Grades */}
+                                        <Link
+                                            href="/employment-structure/job-grades"
+                                            className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                        >
+                                            Job Grades
+                                        </Link>
 
-                                            <SidebarMenuSubItem>
-                                                <SidebarMenuSubButton
-                                                    asChild
-                                                    isActive={page.url.startsWith(
-                                                        '/employment-structure/employment-types'
-                                                    )}
-                                                >
-                                                    <Link href="/employment-structure/employment-types">
-                                                        <span>
-                                                            Employment Types
-                                                        </span>
-                                                    </Link>
-                                                </SidebarMenuSubButton>
-                                            </SidebarMenuSubItem>
+                                        {/* Job Levels */}
+                                        <Link
+                                            href="/employment-structure/job-levels"
+                                            className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                        >
+                                            Job Levels
+                                        </Link>
 
-                                            {/* Employment Statuses */}
+                                        {/* Positions */}
+                                        <Link
+                                            href="/employment-structure/positions"
+                                            className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                        >
+                                            Positions
+                                        </Link>
 
-                                            <SidebarMenuSubItem>
-                                                <SidebarMenuSubButton
-                                                    asChild
-                                                    isActive={page.url.startsWith(
-                                                        '/employment-structure/employment-statuses'
-                                                    )}
-                                                >
-                                                    <Link href="/employment-structure/employment-statuses">
-                                                        <span>
-                                                            Employment Statuses
-                                                        </span>
-                                                    </Link>
-                                                </SidebarMenuSubButton>
-                                            </SidebarMenuSubItem>
-
-                                            {/* Job Grades */}
-
-                                            <SidebarMenuSubItem>
-                                                <SidebarMenuSubButton
-                                                    asChild
-                                                    isActive={page.url.startsWith(
-                                                        '/employment-structure/job-grades'
-                                                    )}
-                                                >
-                                                    <Link href="/employment-structure/job-grades">
-                                                        <span>
-                                                            Job Grades
-                                                        </span>
-                                                    </Link>
-                                                </SidebarMenuSubButton>
-                                            </SidebarMenuSubItem>
-
-                                            {/* Job Levels */}
-
-                                            <SidebarMenuSubItem>
-                                                <SidebarMenuSubButton
-                                                    asChild
-                                                    isActive={page.url.startsWith(
-                                                        '/employment-structure/job-levels'
-                                                    )}
-                                                >
-                                                    <Link href="/employment-structure/job-levels">
-                                                        <span>
-                                                            Job Levels
-                                                        </span>
-                                                    </Link>
-                                                </SidebarMenuSubButton>
-                                            </SidebarMenuSubItem>
-
-                                            {/* Positions */}
-
-                                            <SidebarMenuSubItem>
-                                                <SidebarMenuSubButton
-                                                    asChild
-                                                    isActive={page.url.startsWith(
-                                                        '/employment-structure/positions'
-                                                    )}
-                                                >
-                                                    <Link href="/employment-structure/positions">
-                                                        <span>
-                                                            Positions
-                                                        </span>
-                                                    </Link>
-                                                </SidebarMenuSubButton>
-                                            </SidebarMenuSubItem>
-
-                                        </SidebarMenuSub>
-                                    )}
-
-                                </SidebarMenuSubItem>
+                                    </div>
+                                )}
 
                                 {/* Employment History */}
+                                <Link
+                                    href="/employment-history"
+                                    className={`block rounded-md px-3 py-2 text-sm ${
+                                        isActive('/employment-history')
+                                            ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                                            : 'hover:bg-sidebar-accent'
+                                    }`}
+                                >
+                                    Employment History
+                                </Link>
 
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/employment-history'
-                                        )}
-                                    >
-                                        <Link href="/employment-history">
-                                            <span>
-                                                Employment History
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
-
-                            </SidebarMenuSub>
+                            </div>
                         )}
-
                     </SidebarMenuItem>
 
-                    {/* =================================================
-                        ORGANIZATION
-                    ================================================= */}
-
+                    {/* Organization */}
                     <SidebarMenuItem>
-
                         <SidebarMenuButton
                             onClick={() =>
-                                setOrganizationOpen(
-                                    !organizationOpen
-                                )
+                                setOrganizationOpen(!organizationOpen)
                             }
-                            isActive={isOrganizationActive}
+                            tooltip="Organization"
                         >
                             <Building2 />
 
-                            <span>
-                                Organization
-                            </span>
+                            <span>Organization</span>
 
                             <ChevronDown
                                 className={`ml-auto transition-transform ${
-                                    organizationOpen
-                                        ? 'rotate-180'
-                                        : ''
+                                    organizationOpen ? 'rotate-180' : ''
                                 }`}
                             />
                         </SidebarMenuButton>
 
                         {organizationOpen && (
-                            <SidebarMenuSub>
+                            <div className="ml-6 mt-1 space-y-1">
 
-                                {/* Legal Entities */}
+                                <Link
+                                    href="/legal-entities"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Legal Entities
+                                </Link>
 
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/legal-entities'
-                                        )}
-                                    >
-                                        <Link href="/legal-entities">
-                                            <span>
-                                                Legal Entities
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/companies"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Companies
+                                </Link>
 
-                                {/* Companies */}
+                                <Link
+                                    href="/business-units"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Business Units
+                                </Link>
 
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/companies'
-                                        )}
-                                    >
-                                        <Link href="/companies">
-                                            <span>
-                                                Companies
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/branches"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Branches
+                                </Link>
 
-                                {/* Business Units */}
+                                <Link
+                                    href="/departments"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Departments
+                                </Link>
 
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/business-units'
-                                        )}
-                                    >
-                                        <Link href="/business-units">
-                                            <span>
-                                                Business Units
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/divisions"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Divisions
+                                </Link>
 
-                                {/* Branches */}
+                                <Link
+                                    href="/locations"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Locations
+                                </Link>
 
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/branches'
-                                        )}
-                                    >
-                                        <Link href="/branches">
-                                            <span>
-                                                Branches
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/cost-centers"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Cost Centers
+                                </Link>
 
-                                {/* Departments */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/departments'
-                                        )}
-                                    >
-                                        <Link href="/departments">
-                                            <span>
-                                                Departments
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
-
-                                {/* Divisions */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/divisions'
-                                        )}
-                                    >
-                                        <Link href="/divisions">
-                                            <span>
-                                                Divisions
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
-
-                                {/* Locations */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/locations'
-                                        )}
-                                    >
-                                        <Link href="/locations">
-                                            <span>
-                                                Locations
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
-
-                                {/* Cost Centers */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/cost-centers'
-                                        )}
-                                    >
-                                        <Link href="/cost-centers">
-                                            <span>
-                                                Cost Centers
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
-
-                            </SidebarMenuSub>
+                            </div>
                         )}
-
                     </SidebarMenuItem>
 
-                    {/* =================================================
-                        ATS
-                    ================================================= */}
-
+                    {/* ATS */}
                     <SidebarMenuItem>
-
                         <SidebarMenuButton
-                            onClick={() =>
-                                setAtsOpen(!atsOpen)
-                            }
-                            isActive={isATSActive}
+                            onClick={() => setAtsOpen(!atsOpen)}
+                            tooltip="ATS"
                         >
                             <BriefcaseBusiness />
 
-                            <span>
-                                ATS
-                            </span>
+                            <span>ATS</span>
 
                             <ChevronDown
                                 className={`ml-auto transition-transform ${
-                                    atsOpen
-                                        ? 'rotate-180'
-                                        : ''
+                                    atsOpen ? 'rotate-180' : ''
                                 }`}
                             />
                         </SidebarMenuButton>
 
                         {atsOpen && (
-                            <SidebarMenuSub>
+                            <div className="ml-6 mt-1 space-y-1">
 
                                 {/* Job Requisitions */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/job-requisitions'
-                                        )}
-                                    >
-                                        <Link href="/job-requisitions">
-                                            <span>
-                                                Job Requisitions
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/job-requisitions"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Job Requisitions
+                                </Link>
 
                                 {/* Job Postings */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/job-postings'
-                                        )}
-                                    >
-                                        <Link href="/job-postings">
-                                            <span>
-                                                Job Postings
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/job-postings"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Job Postings
+                                </Link>
 
                                 {/* Candidates */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/candidates'
-                                        )}
-                                    >
-                                        <Link href="/candidates">
-                                            <span>
-                                                Candidates
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/candidates"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Candidates
+                                </Link>
 
                                 {/* Candidate Contacts */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/candidate-contacts'
-                                        )}
-                                    >
-                                        <Link href="/candidate-contacts">
-                                            <span>
-                                                Candidate Contacts
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/candidate-contacts"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Candidate Contacts
+                                </Link>
 
                                 {/* Candidate Education */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/candidate-education'
-                                        )}
-                                    >
-                                        <Link href="/candidate-education">
-                                            <span>
-                                                Candidate Education
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/candidate-education"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Candidate Education
+                                </Link>
 
                                 {/* Candidate Experience */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/candidate-experience'
-                                        )}
-                                    >
-                                        <Link href="/candidate-experience">
-                                            <span>
-                                                Candidate Experience
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/candidate-experience"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Candidate Experience
+                                </Link>
 
                                 {/* Candidate Skills */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/candidate-skills'
-                                        )}
-                                    >
-                                        <Link href="/candidate-skills">
-                                            <span>
-                                                Candidate Skills
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/candidate-skills"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Candidate Skills
+                                </Link>
 
                                 {/* Applications */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/applications'
-                                        )}
-                                    >
-                                        <Link href="/applications">
-                                            <span>
-                                                Applications
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/applications"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Applications
+                                </Link>
 
                                 {/* Application Status Histories */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/application-status-histories'
-                                        )}
-                                    >
-                                        <Link href="/application-status-histories">
-                                            <span>
-                                                Application Status Histories
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/application-status-histories"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Application Status Histories
+                                </Link>
 
                                 {/* Interviews */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/interviews'
-                                        )}
-                                    >
-                                        <Link href="/interviews">
-                                            <span>
-                                                Interviews
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/interviews"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Interviews
+                                </Link>
 
                                 {/* Interviewers */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/interviewers'
-                                        )}
-                                    >
-                                        <Link href="/interviewers">
-                                            <span>
-                                                Interviewers
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/interviewers"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Interviewers
+                                </Link>
 
                                 {/* Job Offers */}
+                                <Link
+                                    href="/job-offers"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Job Offers
+                                </Link>
 
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/job-offers'
-                                        )}
-                                    >
-                                        <Link href="/job-offers">
-                                            <span>
-                                                Job Offers
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                {/* Assessments */}
+                                <Link
+                                    href="/assessments"
+                                    className={`block rounded-md px-3 py-2 text-sm ${
+                                        isActive('/assessments')
+                                            ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                                            : 'hover:bg-sidebar-accent'
+                                    }`}
+                                >
+                                    Assessments
+                                </Link>
 
-                            </SidebarMenuSub>
+                            </div>
                         )}
-
                     </SidebarMenuItem>
 
-                    {/* =================================================
-                        ONBOARDING
-                    ================================================= */}
-
+                    {/* Onboarding */}
                     <SidebarMenuItem>
-
                         <SidebarMenuButton
                             onClick={() =>
-                                setOnboardingOpen(
-                                    !onboardingOpen
-                                )
+                                setOnboardingOpen(!onboardingOpen)
                             }
-                            isActive={isOnboardingActive}
+                            tooltip="Onboarding"
                         >
                             <UserRoundCheck />
 
-                            <span>
-                                Onboarding
-                            </span>
+                            <span>Onboarding</span>
 
                             <ChevronDown
                                 className={`ml-auto transition-transform ${
-                                    onboardingOpen
-                                        ? 'rotate-180'
-                                        : ''
+                                    onboardingOpen ? 'rotate-180' : ''
                                 }`}
                             />
                         </SidebarMenuButton>
 
                         {onboardingOpen && (
-                            <SidebarMenuSub>
+                            <div className="ml-6 mt-1 space-y-1">
 
                                 {/* Onboarding Templates */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/onboarding-templates'
-                                        )}
-                                    >
-                                        <Link href="/onboarding-templates">
-                                            <span>
-                                                Onboarding Templates
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/onboarding-templates"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Onboarding Templates
+                                </Link>
 
                                 {/* Onboarding Tasks */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/onboarding-tasks'
-                                        )}
-                                    >
-                                        <Link href="/onboarding-tasks">
-                                            <span>
-                                                Onboarding Tasks
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/onboarding-tasks"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Onboarding Tasks
+                                </Link>
 
                                 {/* Employee Onboarding */}
-
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/employee-onboardings'
-                                        )}
-                                    >
-                                        <Link href="/employee-onboardings">
-                                            <span>
-                                                Employee Onboarding
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
+                                <Link
+                                    href="/employee-onboardings"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Employee Onboarding
+                                </Link>
 
                                 {/* Employee Onboarding Tasks */}
+                                <Link
+                                    href="/employee-onboarding-tasks"
+                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
+                                >
+                                    Employee Onboarding Tasks
+                                </Link>
 
-                                <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton
-                                        asChild
-                                        isActive={page.url.startsWith(
-                                            '/employee-onboarding-tasks'
-                                        )}
-                                    >
-                                        <Link href="/employee-onboarding-tasks">
-                                            <span>
-                                                Employee Onboarding Tasks
-                                            </span>
-                                        </Link>
-                                    </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
-
-                            </SidebarMenuSub>
+                            </div>
                         )}
-
                     </SidebarMenuItem>
 
                 </SidebarMenu>
             </SidebarContent>
 
-            <SidebarRail />
+            <SidebarFooter>
+                <NavUser />
+            </SidebarFooter>
 
         </Sidebar>
     );
