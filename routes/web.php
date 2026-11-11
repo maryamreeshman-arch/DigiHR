@@ -57,6 +57,8 @@ use App\Http\Controllers\EmployeeShiftAssignmentController;
 use App\Http\Controllers\ShiftRuleController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\RosterAssignmentController;
+use App\Http\Controllers\HolidayCalendarController;
+use App\Http\Controllers\HolidayController;
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -1171,5 +1173,27 @@ Route::put('/roster-assignments/{rosterAssignment}', [RosterAssignmentController
 
 Route::delete('/roster-assignments/{rosterAssignment}', [RosterAssignmentController::class, 'destroy'])
     ->name('roster-assignments.destroy');
+
+    // Holiday Management
+Route::get('/holiday-calendars', [HolidayCalendarController::class, 'index'])
+    ->name('holiday-calendars.index');
+
+Route::post('/holiday-calendars', [HolidayCalendarController::class, 'store'])
+    ->name('holiday-calendars.store');
+
+Route::put('/holiday-calendars/{holidayCalendar}', [HolidayCalendarController::class, 'update'])
+    ->name('holiday-calendars.update');
+
+Route::delete('/holiday-calendars/{holidayCalendar}', [HolidayCalendarController::class, 'destroy'])
+    ->name('holiday-calendars.destroy');
+
+Route::post('/holidays', [HolidayController::class, 'store'])
+    ->name('holidays.store');
+
+Route::put('/holidays/{holiday}', [HolidayController::class, 'update'])
+    ->name('holidays.update');
+
+Route::delete('/holidays/{holiday}', [HolidayController::class, 'destroy'])
+    ->name('holidays.destroy');
 
 require __DIR__.'/settings.php';

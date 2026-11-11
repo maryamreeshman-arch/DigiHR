@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     BriefcaseBusiness,
     Building2,
+    CalendarDays,
     ChevronDown,
     Clock,
     LayoutGrid,
@@ -90,7 +91,9 @@ export function AppSidebar() {
             url.startsWith('/shift-assignments') ||
             url.startsWith('/shift-rules') ||
             url.startsWith('/rosters') ||
-            url.startsWith('/roster-assignments')
+            url.startsWith('/roster-assignments') ||
+            url.startsWith('/holiday-calendars') ||
+            url.startsWith('/holidays')
         ) {
             setAttendanceOpen(true);
         }
@@ -99,11 +102,11 @@ export function AppSidebar() {
     const isActive = (path: string) => url.startsWith(path);
 
     const subLinkClass = (path: string) =>
-    `block rounded-md px-3 py-2 text-sm transition-colors ${
-        isActive(path)
-            ? 'bg-blue-100 text-blue-900 font-medium dark:bg-blue-900 dark:text-white'
-            : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white'
-    }`;
+        `block rounded-md px-3 py-2 text-sm transition-colors ${
+            isActive(path)
+                ? 'bg-blue-100 text-blue-900 font-medium dark:bg-blue-900 dark:text-white'
+                : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white'
+        }`;
 
     const dropdownButtonClass =
         'flex w-full items-center rounded-md px-3 py-2 text-left text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground';
@@ -336,6 +339,10 @@ export function AppSidebar() {
                                 </Link>
                                 <Link href="/rosters" className={subLinkClass('/rosters')}>
                                     Shift Roster
+                                </Link>
+                                <Link href="/holiday-calendars" className={subLinkClass('/holiday-calendars')}>
+                                    <CalendarDays className="mr-2 inline h-4 w-4" />
+                                    Holiday Management
                                 </Link>
                             </div>
                         )}
