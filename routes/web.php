@@ -59,6 +59,12 @@ use App\Http\Controllers\RosterController;
 use App\Http\Controllers\RosterAssignmentController;
 use App\Http\Controllers\HolidayCalendarController;
 use App\Http\Controllers\HolidayController;
+use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\LeavePolicyController;
+use App\Http\Controllers\LeavePolicyRuleController;
+use App\Http\Controllers\LeaveBalanceController;
+use App\Http\Controllers\LeaveRequestController;
+use App\Http\Controllers\LeaveRequestDayController;
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -1196,4 +1202,38 @@ Route::put('/holidays/{holiday}', [HolidayController::class, 'update'])
 Route::delete('/holidays/{holiday}', [HolidayController::class, 'destroy'])
     ->name('holidays.destroy');
 
+
+    // Leave Management
+Route::middleware(['auth'])->group(function () {
+    Route::resource('leave-types', LeaveTypeController::class)
+        ->except(['create', 'show', 'edit']);
+
+    Route::resource('leave-policies', LeavePolicyController::class)
+        ->except(['create', 'show', 'edit']);
+
+    Route::get('leave-policy-rules', [LeavePolicyRuleController::class, 'index'])
+        ->name('leave-policy-rules.index');
+    Route::post('leave-policy-rules', [LeavePolicyRuleController::class, 'store'])
+        ->name('leave-policy-rules.store');
+    Route::put('leave-policy-rules/{leavePolicyRule}', [LeavePolicyRuleController::class, 'update'])
+        ->name('leave-policy-rules.update');
+    Route::delete('leave-policy-rules/{leavePolicyRule}', [LeavePolicyRuleController::class, 'destroy'])
+        ->name('leave-policy-rules.destroy');
+
+    Route::resource('leave-balances', LeaveBalanceController::class)
+        ->except(['create', 'show', 'edit']);
+
+    Route::resource('leave-requests', LeaveRequestController::class)
+        ->except(['create', 'show', 'edit']);
+
+    Route::post('leave-requests/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])
+        ->name('leave-requests.approve');
+    Route::post('leave-requests/{leaveRequest}/reject', [LeaveRequestController::class, 'reject'])
+        ->name('leave-requests.reject');
+
+    Route::put('leave-request-days/{leaveRequestDay}', [LeaveRequestDayController::class, 'update'])
+        ->name('leave-request-days.update');
+    Route::delete('leave-request-days/{leaveRequestDay}', [LeaveRequestDayController::class, 'destroy'])
+        ->name('leave-request-days.destroy');
+});
 require __DIR__.'/settings.php';

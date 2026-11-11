@@ -8,6 +8,7 @@ import {
     LayoutGrid,
     UserRoundCheck,
     Users,
+    CalendarCheck,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -31,6 +32,7 @@ export function AppSidebar() {
     const [atsOpen, setAtsOpen] = useState(false);
     const [onboardingOpen, setOnboardingOpen] = useState(false);
     const [attendanceOpen, setAttendanceOpen] = useState(false);
+    const [leaveOpen, setLeaveOpen] = useState(false);
 
     useEffect(() => {
         if (
@@ -97,6 +99,16 @@ export function AppSidebar() {
         ) {
             setAttendanceOpen(true);
         }
+
+        if (
+            url.startsWith('/leave-types') ||
+            url.startsWith('/leave-policies') ||
+            url.startsWith('/leave-policy-rules') ||
+            url.startsWith('/leave-balances') ||
+            url.startsWith('/leave-requests')
+        ) {
+            setLeaveOpen(true);
+        }
     }, [url]);
 
     const isActive = (path: string) => url.startsWith(path);
@@ -125,11 +137,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     {/* Dashboard */}
                     <SidebarMenuItem>
-                        <SidebarMenuButton
-                            asChild
-                            isActive={isActive('/dashboard')}
-                            tooltip="Dashboard"
-                        >
+                        <SidebarMenuButton asChild isActive={isActive('/dashboard')} tooltip="Dashboard">
                             <Link href="/dashboard">
                                 <LayoutGrid />
                                 <span>Dashboard</span>
@@ -139,11 +147,7 @@ export function AppSidebar() {
 
                     {/* Tenants */}
                     <SidebarMenuItem>
-                        <SidebarMenuButton
-                            asChild
-                            isActive={isActive('/tenants')}
-                            tooltip="Tenants"
-                        >
+                        <SidebarMenuButton asChild isActive={isActive('/tenants')} tooltip="Tenants">
                             <Link href="/tenants">
                                 <Building2 />
                                 <span>Tenants</span>
@@ -153,67 +157,34 @@ export function AppSidebar() {
 
                     {/* Employees */}
                     <SidebarMenuItem>
-                        <SidebarMenuButton
-                            onClick={() => setEmployeesOpen(!employeesOpen)}
-                            tooltip="Employees"
-                        >
+                        <SidebarMenuButton onClick={() => setEmployeesOpen(!employeesOpen)} tooltip="Employees">
                             <Users />
                             <span>Employees</span>
-                            <ChevronDown
-                                className={`ml-auto transition-transform ${
-                                    employeesOpen ? 'rotate-180' : ''
-                                }`}
-                            />
+                            <ChevronDown className={`ml-auto transition-transform ${employeesOpen ? 'rotate-180' : ''}`} />
                         </SidebarMenuButton>
 
                         {employeesOpen && (
                             <div className="ml-6 mt-1 space-y-1">
-                                <Link
-                                    href="/employees"
-                                    className={subLinkClass('/employees')}
-                                >
+                                <Link href="/employees" className={subLinkClass('/employees')}>
                                     Employee Profile
                                 </Link>
 
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        setEmploymentStructureOpen(!employmentStructureOpen)
-                                    }
-                                    className={dropdownButtonClass}
-                                >
+                                <button type="button" onClick={() => setEmploymentStructureOpen(!employmentStructureOpen)} className={dropdownButtonClass}>
                                     <span>Employment Structure</span>
-                                    <ChevronDown
-                                        className={`ml-auto h-4 w-4 transition-transform ${
-                                            employmentStructureOpen ? 'rotate-180' : ''
-                                        }`}
-                                    />
+                                    <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${employmentStructureOpen ? 'rotate-180' : ''}`} />
                                 </button>
 
                                 {employmentStructureOpen && (
                                     <div className="ml-4 space-y-1">
-                                        <Link href="/employment-structure/types" className={subLinkClass('/employment-structure/types')}>
-                                            Employment Types
-                                        </Link>
-                                        <Link href="/employment-structure/statuses" className={subLinkClass('/employment-structure/statuses')}>
-                                            Employment Statuses
-                                        </Link>
-                                        <Link href="/employment-structure/job-grades" className={subLinkClass('/employment-structure/job-grades')}>
-                                            Job Grades
-                                        </Link>
-                                        <Link href="/employment-structure/job-levels" className={subLinkClass('/employment-structure/job-levels')}>
-                                            Job Levels
-                                        </Link>
-                                        <Link href="/employment-structure/positions" className={subLinkClass('/employment-structure/positions')}>
-                                            Positions
-                                        </Link>
+                                        <Link href="/employment-structure/types" className={subLinkClass('/employment-structure/types')}>Employment Types</Link>
+                                        <Link href="/employment-structure/statuses" className={subLinkClass('/employment-structure/statuses')}>Employment Statuses</Link>
+                                        <Link href="/employment-structure/job-grades" className={subLinkClass('/employment-structure/job-grades')}>Job Grades</Link>
+                                        <Link href="/employment-structure/job-levels" className={subLinkClass('/employment-structure/job-levels')}>Job Levels</Link>
+                                        <Link href="/employment-structure/positions" className={subLinkClass('/employment-structure/positions')}>Positions</Link>
                                     </div>
                                 )}
 
-                                <Link
-                                    href="/employment-history"
-                                    className={subLinkClass('/employment-history')}
-                                >
+                                <Link href="/employment-history" className={subLinkClass('/employment-history')}>
                                     Employment History
                                 </Link>
                             </div>
@@ -222,17 +193,10 @@ export function AppSidebar() {
 
                     {/* Organization */}
                     <SidebarMenuItem>
-                        <SidebarMenuButton
-                            onClick={() => setOrganizationOpen(!organizationOpen)}
-                            tooltip="Organization"
-                        >
+                        <SidebarMenuButton onClick={() => setOrganizationOpen(!organizationOpen)} tooltip="Organization">
                             <Building2 />
                             <span>Organization</span>
-                            <ChevronDown
-                                className={`ml-auto transition-transform ${
-                                    organizationOpen ? 'rotate-180' : ''
-                                }`}
-                            />
+                            <ChevronDown className={`ml-auto transition-transform ${organizationOpen ? 'rotate-180' : ''}`} />
                         </SidebarMenuButton>
 
                         {organizationOpen && (
@@ -251,17 +215,10 @@ export function AppSidebar() {
 
                     {/* ATS */}
                     <SidebarMenuItem>
-                        <SidebarMenuButton
-                            onClick={() => setAtsOpen(!atsOpen)}
-                            tooltip="ATS"
-                        >
+                        <SidebarMenuButton onClick={() => setAtsOpen(!atsOpen)} tooltip="ATS">
                             <BriefcaseBusiness />
                             <span>ATS</span>
-                            <ChevronDown
-                                className={`ml-auto transition-transform ${
-                                    atsOpen ? 'rotate-180' : ''
-                                }`}
-                            />
+                            <ChevronDown className={`ml-auto transition-transform ${atsOpen ? 'rotate-180' : ''}`} />
                         </SidebarMenuButton>
 
                         {atsOpen && (
@@ -285,17 +242,10 @@ export function AppSidebar() {
 
                     {/* Onboarding */}
                     <SidebarMenuItem>
-                        <SidebarMenuButton
-                            onClick={() => setOnboardingOpen(!onboardingOpen)}
-                            tooltip="Onboarding"
-                        >
+                        <SidebarMenuButton onClick={() => setOnboardingOpen(!onboardingOpen)} tooltip="Onboarding">
                             <UserRoundCheck />
                             <span>Onboarding</span>
-                            <ChevronDown
-                                className={`ml-auto transition-transform ${
-                                    onboardingOpen ? 'rotate-180' : ''
-                                }`}
-                            />
+                            <ChevronDown className={`ml-auto transition-transform ${onboardingOpen ? 'rotate-180' : ''}`} />
                         </SidebarMenuButton>
 
                         {onboardingOpen && (
@@ -310,40 +260,42 @@ export function AppSidebar() {
 
                     {/* Attendance & Shifts */}
                     <SidebarMenuItem>
-                        <SidebarMenuButton
-                            onClick={() => setAttendanceOpen(!attendanceOpen)}
-                            tooltip="Attendance"
-                        >
+                        <SidebarMenuButton onClick={() => setAttendanceOpen(!attendanceOpen)} tooltip="Attendance">
                             <Clock />
                             <span>Attendance</span>
-                            <ChevronDown
-                                className={`ml-auto transition-transform ${
-                                    attendanceOpen ? 'rotate-180' : ''
-                                }`}
-                            />
+                            <ChevronDown className={`ml-auto transition-transform ${attendanceOpen ? 'rotate-180' : ''}`} />
                         </SidebarMenuButton>
 
                         {attendanceOpen && (
                             <div className="ml-6 mt-1 space-y-1">
-                                <Link href="/attendance" className={subLinkClass('/attendance')}>
-                                    Attendance
-                                </Link>
-                                <Link href="/shifts" className={subLinkClass('/shifts')}>
-                                    Shift Management
-                                </Link>
-                                <Link href="/shift-assignments" className={subLinkClass('/shift-assignments')}>
-                                    Employee Shift Assignment
-                                </Link>
-                                <Link href="/shift-rules" className={subLinkClass('/shift-rules')}>
-                                    Shift Rules
-                                </Link>
-                                <Link href="/rosters" className={subLinkClass('/rosters')}>
-                                    Shift Roster
-                                </Link>
+                                <Link href="/attendance" className={subLinkClass('/attendance')}>Attendance</Link>
+                                <Link href="/shifts" className={subLinkClass('/shifts')}>Shift Management</Link>
+                                <Link href="/shift-assignments" className={subLinkClass('/shift-assignments')}>Employee Shift Assignment</Link>
+                                <Link href="/shift-rules" className={subLinkClass('/shift-rules')}>Shift Rules</Link>
+                                <Link href="/rosters" className={subLinkClass('/rosters')}>Shift Roster</Link>
                                 <Link href="/holiday-calendars" className={subLinkClass('/holiday-calendars')}>
                                     <CalendarDays className="mr-2 inline h-4 w-4" />
                                     Holiday Management
                                 </Link>
+                            </div>
+                        )}
+                    </SidebarMenuItem>
+
+                    {/* Leave Management */}
+                    <SidebarMenuItem>
+                        <SidebarMenuButton onClick={() => setLeaveOpen(!leaveOpen)} tooltip="Leave Management">
+                            <CalendarCheck />
+                            <span>Leave Management</span>
+                            <ChevronDown className={`ml-auto transition-transform ${leaveOpen ? 'rotate-180' : ''}`} />
+                        </SidebarMenuButton>
+
+                        {leaveOpen && (
+                            <div className="ml-6 mt-1 space-y-1">
+                                <Link href="/leave-types" className={subLinkClass('/leave-types')}>Leave Types</Link>
+                                <Link href="/leave-policies" className={subLinkClass('/leave-policies')}>Leave Policies</Link>
+                                <Link href="/leave-policy-rules" className={subLinkClass('/leave-policy-rules')}>Leave Policy Rules</Link>
+                                <Link href="/leave-balances" className={subLinkClass('/leave-balances')}>Leave Balances</Link>
+                                <Link href="/leave-requests" className={subLinkClass('/leave-requests')}>Leave Requests</Link>
                             </div>
                         )}
                     </SidebarMenuItem>
