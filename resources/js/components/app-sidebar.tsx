@@ -3,12 +3,14 @@ import {
     BriefcaseBusiness,
     Building2,
     ChevronDown,
+    Clock,
     LayoutGrid,
     UserRoundCheck,
     Users,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
     SidebarContent,
@@ -18,17 +20,16 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { type SharedData } from '@/types';
-import { NavUser } from '@/components/nav-user';
 
 export function AppSidebar() {
-    const { url } = usePage<SharedData>();
+    const { url } = usePage();
 
     const [employeesOpen, setEmployeesOpen] = useState(false);
     const [employmentStructureOpen, setEmploymentStructureOpen] = useState(false);
     const [organizationOpen, setOrganizationOpen] = useState(false);
     const [atsOpen, setAtsOpen] = useState(false);
     const [onboardingOpen, setOnboardingOpen] = useState(false);
+    const [attendanceOpen, setAttendanceOpen] = useState(false);
 
     useEffect(() => {
         if (
@@ -82,16 +83,33 @@ export function AppSidebar() {
         ) {
             setOnboardingOpen(true);
         }
+
+        if (
+            url.startsWith('/attendance') ||
+            url.startsWith('/shifts') ||
+            url.startsWith('/shift-assignments') ||
+            url.startsWith('/shift-rules') ||
+            url.startsWith('/rosters') ||
+            url.startsWith('/roster-assignments')
+        ) {
+            setAttendanceOpen(true);
+        }
     }, [url]);
 
-    const isActive = (path: string) => {
-        return url.startsWith(path);
-    };
+    const isActive = (path: string) => url.startsWith(path);
+
+    const subLinkClass = (path: string) =>
+    `block rounded-md px-3 py-2 text-sm transition-colors ${
+        isActive(path)
+            ? 'bg-blue-100 text-blue-900 font-medium dark:bg-blue-900 dark:text-white'
+            : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white'
+    }`;
+
+    const dropdownButtonClass =
+        'flex w-full items-center rounded-md px-3 py-2 text-left text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground';
 
     return (
         <Sidebar collapsible="icon">
-
-            {/* DigiHR Name */}
             <SidebarHeader>
                 <div className="flex h-12 items-center px-4">
                     <span className="text-lg font-bold tracking-tight">
@@ -102,7 +120,6 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <SidebarMenu>
-
                     {/* Dashboard */}
                     <SidebarMenuItem>
                         <SidebarMenuButton
@@ -139,7 +156,6 @@ export function AppSidebar() {
                         >
                             <Users />
                             <span>Employees</span>
-
                             <ChevronDown
                                 className={`ml-auto transition-transform ${
                                     employeesOpen ? 'rotate-180' : ''
@@ -149,97 +165,54 @@ export function AppSidebar() {
 
                         {employeesOpen && (
                             <div className="ml-6 mt-1 space-y-1">
-
-                                {/* Employee Profile */}
                                 <Link
                                     href="/employees"
-                                    className={`block rounded-md px-3 py-2 text-sm ${
-                                        isActive('/employees')
-                                            ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                                            : 'hover:bg-sidebar-accent'
-                                    }`}
+                                    className={subLinkClass('/employees')}
                                 >
                                     Employee Profile
                                 </Link>
 
-                                {/* Employment Structure */}
                                 <button
+                                    type="button"
                                     onClick={() =>
-                                        setEmploymentStructureOpen(
-                                            !employmentStructureOpen,
-                                        )
+                                        setEmploymentStructureOpen(!employmentStructureOpen)
                                     }
-                                    className="flex w-full items-center rounded-md px-3 py-2 text-left text-sm hover:bg-sidebar-accent"
+                                    className={dropdownButtonClass}
                                 >
                                     <span>Employment Structure</span>
-
                                     <ChevronDown
                                         className={`ml-auto h-4 w-4 transition-transform ${
-                                            employmentStructureOpen
-                                                ? 'rotate-180'
-                                                : ''
+                                            employmentStructureOpen ? 'rotate-180' : ''
                                         }`}
                                     />
                                 </button>
 
                                 {employmentStructureOpen && (
                                     <div className="ml-4 space-y-1">
-
-                                        {/* Employment Types */}
-                                        <Link
-                                            href="/employment-structure/types"
-                                            className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                        >
+                                        <Link href="/employment-structure/types" className={subLinkClass('/employment-structure/types')}>
                                             Employment Types
                                         </Link>
-
-                                        {/* Employment Statuses */}
-                                        <Link
-                                            href="/employment-structure/statuses"
-                                            className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                        >
+                                        <Link href="/employment-structure/statuses" className={subLinkClass('/employment-structure/statuses')}>
                                             Employment Statuses
                                         </Link>
-
-                                        {/* Job Grades */}
-                                        <Link
-                                            href="/employment-structure/job-grades"
-                                            className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                        >
+                                        <Link href="/employment-structure/job-grades" className={subLinkClass('/employment-structure/job-grades')}>
                                             Job Grades
                                         </Link>
-
-                                        {/* Job Levels */}
-                                        <Link
-                                            href="/employment-structure/job-levels"
-                                            className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                        >
+                                        <Link href="/employment-structure/job-levels" className={subLinkClass('/employment-structure/job-levels')}>
                                             Job Levels
                                         </Link>
-
-                                        {/* Positions */}
-                                        <Link
-                                            href="/employment-structure/positions"
-                                            className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                        >
+                                        <Link href="/employment-structure/positions" className={subLinkClass('/employment-structure/positions')}>
                                             Positions
                                         </Link>
-
                                     </div>
                                 )}
 
-                                {/* Employment History */}
                                 <Link
                                     href="/employment-history"
-                                    className={`block rounded-md px-3 py-2 text-sm ${
-                                        isActive('/employment-history')
-                                            ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                                            : 'hover:bg-sidebar-accent'
-                                    }`}
+                                    className={subLinkClass('/employment-history')}
                                 >
                                     Employment History
                                 </Link>
-
                             </div>
                         )}
                     </SidebarMenuItem>
@@ -247,15 +220,11 @@ export function AppSidebar() {
                     {/* Organization */}
                     <SidebarMenuItem>
                         <SidebarMenuButton
-                            onClick={() =>
-                                setOrganizationOpen(!organizationOpen)
-                            }
+                            onClick={() => setOrganizationOpen(!organizationOpen)}
                             tooltip="Organization"
                         >
                             <Building2 />
-
                             <span>Organization</span>
-
                             <ChevronDown
                                 className={`ml-auto transition-transform ${
                                     organizationOpen ? 'rotate-180' : ''
@@ -265,63 +234,14 @@ export function AppSidebar() {
 
                         {organizationOpen && (
                             <div className="ml-6 mt-1 space-y-1">
-
-                                <Link
-                                    href="/legal-entities"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Legal Entities
-                                </Link>
-
-                                <Link
-                                    href="/companies"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Companies
-                                </Link>
-
-                                <Link
-                                    href="/business-units"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Business Units
-                                </Link>
-
-                                <Link
-                                    href="/branches"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Branches
-                                </Link>
-
-                                <Link
-                                    href="/departments"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Departments
-                                </Link>
-
-                                <Link
-                                    href="/divisions"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Divisions
-                                </Link>
-
-                                <Link
-                                    href="/locations"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Locations
-                                </Link>
-
-                                <Link
-                                    href="/cost-centers"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Cost Centers
-                                </Link>
-
+                                <Link href="/legal-entities" className={subLinkClass('/legal-entities')}>Legal Entities</Link>
+                                <Link href="/companies" className={subLinkClass('/companies')}>Companies</Link>
+                                <Link href="/business-units" className={subLinkClass('/business-units')}>Business Units</Link>
+                                <Link href="/branches" className={subLinkClass('/branches')}>Branches</Link>
+                                <Link href="/departments" className={subLinkClass('/departments')}>Departments</Link>
+                                <Link href="/divisions" className={subLinkClass('/divisions')}>Divisions</Link>
+                                <Link href="/locations" className={subLinkClass('/locations')}>Locations</Link>
+                                <Link href="/cost-centers" className={subLinkClass('/cost-centers')}>Cost Centers</Link>
                             </div>
                         )}
                     </SidebarMenuItem>
@@ -333,9 +253,7 @@ export function AppSidebar() {
                             tooltip="ATS"
                         >
                             <BriefcaseBusiness />
-
                             <span>ATS</span>
-
                             <ChevronDown
                                 className={`ml-auto transition-transform ${
                                     atsOpen ? 'rotate-180' : ''
@@ -345,115 +263,19 @@ export function AppSidebar() {
 
                         {atsOpen && (
                             <div className="ml-6 mt-1 space-y-1">
-
-                                {/* Job Requisitions */}
-                                <Link
-                                    href="/job-requisitions"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Job Requisitions
-                                </Link>
-
-                                {/* Job Postings */}
-                                <Link
-                                    href="/job-postings"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Job Postings
-                                </Link>
-
-                                {/* Candidates */}
-                                <Link
-                                    href="/candidates"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Candidates
-                                </Link>
-
-                                {/* Candidate Contacts */}
-                                <Link
-                                    href="/candidate-contacts"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Candidate Contacts
-                                </Link>
-
-                                {/* Candidate Education */}
-                                <Link
-                                    href="/candidate-education"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Candidate Education
-                                </Link>
-
-                                {/* Candidate Experience */}
-                                <Link
-                                    href="/candidate-experience"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Candidate Experience
-                                </Link>
-
-                                {/* Candidate Skills */}
-                                <Link
-                                    href="/candidate-skills"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Candidate Skills
-                                </Link>
-
-                                {/* Applications */}
-                                <Link
-                                    href="/applications"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Applications
-                                </Link>
-
-                                {/* Application Status Histories */}
-                                <Link
-                                    href="/application-status-histories"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Application Status Histories
-                                </Link>
-
-                                {/* Interviews */}
-                                <Link
-                                    href="/interviews"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Interviews
-                                </Link>
-
-                                {/* Interviewers */}
-                                <Link
-                                    href="/interviewers"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Interviewers
-                                </Link>
-
-                                {/* Job Offers */}
-                                <Link
-                                    href="/job-offers"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Job Offers
-                                </Link>
-
-                                {/* Assessments */}
-                                <Link
-                                    href="/assessments"
-                                    className={`block rounded-md px-3 py-2 text-sm ${
-                                        isActive('/assessments')
-                                            ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                                            : 'hover:bg-sidebar-accent'
-                                    }`}
-                                >
-                                    Assessments
-                                </Link>
-
+                                <Link href="/job-requisitions" className={subLinkClass('/job-requisitions')}>Job Requisitions</Link>
+                                <Link href="/job-postings" className={subLinkClass('/job-postings')}>Job Postings</Link>
+                                <Link href="/candidates" className={subLinkClass('/candidates')}>Candidates</Link>
+                                <Link href="/candidate-contacts" className={subLinkClass('/candidate-contacts')}>Candidate Contacts</Link>
+                                <Link href="/candidate-education" className={subLinkClass('/candidate-education')}>Candidate Education</Link>
+                                <Link href="/candidate-experience" className={subLinkClass('/candidate-experience')}>Candidate Experience</Link>
+                                <Link href="/candidate-skills" className={subLinkClass('/candidate-skills')}>Candidate Skills</Link>
+                                <Link href="/applications" className={subLinkClass('/applications')}>Applications</Link>
+                                <Link href="/application-status-histories" className={subLinkClass('/application-status-histories')}>Application Status Histories</Link>
+                                <Link href="/interviews" className={subLinkClass('/interviews')}>Interviews</Link>
+                                <Link href="/interviewers" className={subLinkClass('/interviewers')}>Interviewers</Link>
+                                <Link href="/job-offers" className={subLinkClass('/job-offers')}>Job Offers</Link>
+                                <Link href="/assessments" className={subLinkClass('/assessments')}>Assessments</Link>
                             </div>
                         )}
                     </SidebarMenuItem>
@@ -461,15 +283,11 @@ export function AppSidebar() {
                     {/* Onboarding */}
                     <SidebarMenuItem>
                         <SidebarMenuButton
-                            onClick={() =>
-                                setOnboardingOpen(!onboardingOpen)
-                            }
+                            onClick={() => setOnboardingOpen(!onboardingOpen)}
                             tooltip="Onboarding"
                         >
                             <UserRoundCheck />
-
                             <span>Onboarding</span>
-
                             <ChevronDown
                                 className={`ml-auto transition-transform ${
                                     onboardingOpen ? 'rotate-180' : ''
@@ -479,50 +297,55 @@ export function AppSidebar() {
 
                         {onboardingOpen && (
                             <div className="ml-6 mt-1 space-y-1">
-
-                                {/* Onboarding Templates */}
-                                <Link
-                                    href="/onboarding-templates"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Onboarding Templates
-                                </Link>
-
-                                {/* Onboarding Tasks */}
-                                <Link
-                                    href="/onboarding-tasks"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Onboarding Tasks
-                                </Link>
-
-                                {/* Employee Onboarding */}
-                                <Link
-                                    href="/employee-onboardings"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Employee Onboarding
-                                </Link>
-
-                                {/* Employee Onboarding Tasks */}
-                                <Link
-                                    href="/employee-onboarding-tasks"
-                                    className="block rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent"
-                                >
-                                    Employee Onboarding Tasks
-                                </Link>
-
+                                <Link href="/onboarding-templates" className={subLinkClass('/onboarding-templates')}>Onboarding Templates</Link>
+                                <Link href="/onboarding-tasks" className={subLinkClass('/onboarding-tasks')}>Onboarding Tasks</Link>
+                                <Link href="/employee-onboardings" className={subLinkClass('/employee-onboardings')}>Employee Onboarding</Link>
+                                <Link href="/employee-onboarding-tasks" className={subLinkClass('/employee-onboarding-tasks')}>Employee Onboarding Tasks</Link>
                             </div>
                         )}
                     </SidebarMenuItem>
 
+                    {/* Attendance & Shifts */}
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            onClick={() => setAttendanceOpen(!attendanceOpen)}
+                            tooltip="Attendance"
+                        >
+                            <Clock />
+                            <span>Attendance</span>
+                            <ChevronDown
+                                className={`ml-auto transition-transform ${
+                                    attendanceOpen ? 'rotate-180' : ''
+                                }`}
+                            />
+                        </SidebarMenuButton>
+
+                        {attendanceOpen && (
+                            <div className="ml-6 mt-1 space-y-1">
+                                <Link href="/attendance" className={subLinkClass('/attendance')}>
+                                    Attendance
+                                </Link>
+                                <Link href="/shifts" className={subLinkClass('/shifts')}>
+                                    Shift Management
+                                </Link>
+                                <Link href="/shift-assignments" className={subLinkClass('/shift-assignments')}>
+                                    Employee Shift Assignment
+                                </Link>
+                                <Link href="/shift-rules" className={subLinkClass('/shift-rules')}>
+                                    Shift Rules
+                                </Link>
+                                <Link href="/rosters" className={subLinkClass('/rosters')}>
+                                    Shift Roster
+                                </Link>
+                            </div>
+                        )}
+                    </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarContent>
 
             <SidebarFooter>
                 <NavUser />
             </SidebarFooter>
-
         </Sidebar>
     );
 }

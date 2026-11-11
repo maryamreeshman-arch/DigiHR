@@ -55,6 +55,8 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\EmployeeShiftAssignmentController;
 use App\Http\Controllers\ShiftRuleController;
+use App\Http\Controllers\RosterController;
+use App\Http\Controllers\RosterAssignmentController;
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -1154,6 +1156,20 @@ Route::get('/shift-rules', [ShiftRuleController::class, 'index'])
 Route::put('/shift-rules/{shift}', [ShiftRuleController::class, 'update'])
     ->name('shift-rules.update');
 
+// Shift Roster
+Route::get('/rosters', [RosterController::class, 'index'])->name('rosters.index');
+Route::post('/rosters', [RosterController::class, 'store'])->name('rosters.store');
+Route::put('/rosters/{roster}', [RosterController::class, 'update'])->name('rosters.update');
+Route::delete('/rosters/{roster}', [RosterController::class, 'destroy'])->name('rosters.destroy');
 
+// Roster Assignments
+Route::post('/roster-assignments', [RosterAssignmentController::class, 'store'])
+    ->name('roster-assignments.store');
+
+Route::put('/roster-assignments/{rosterAssignment}', [RosterAssignmentController::class, 'update'])
+    ->name('roster-assignments.update');
+
+Route::delete('/roster-assignments/{rosterAssignment}', [RosterAssignmentController::class, 'destroy'])
+    ->name('roster-assignments.destroy');
 
 require __DIR__.'/settings.php';
